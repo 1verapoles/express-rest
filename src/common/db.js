@@ -117,8 +117,20 @@ const deleteBoard = (id) => {
   db.boards.splice(boardIndex, 1);
 };
 
+
+/**
+ * Returns the array of all tasks of certain board
+ * @param {string} boardId  id of board
+ * @returns {Task[]} all tasks of certain board
+ */
 const getAllTasks = (boardId) => db.tasks.filter(el => el.boardId === boardId);
 
+/**
+ * Returns the task by specified id and boardId or an error if board or task is not found
+ * @param {string} boardId  id of board
+ * @param {string} id  id of task
+ * @returns {(Task|Object)} task or error object if an error occurred
+ */
 const getTask = (boardId, id) => {
   const boardIndex = db.boards.findIndex(el => el.id === boardId);
   if (boardIndex === -1) throw new Error(`Board with id ${boardId} not found`);
@@ -127,12 +139,25 @@ const getTask = (boardId, id) => {
   return task;
 };
 
+/**
+ * Creates new task and adds him to db 
+ * @param {string} boardId  id of board
+ * @param {{title: string, order: number, description: string, userId: string, boardId: string, columnId: string}} task data for new task
+ * @returns {Task} new task 
+ */
 const postTask = (boardId, task) => {
   const newTask = new Task({ ...task, boardId });
   db.tasks.push(newTask);
   return newTask;
 };
 
+/**
+ * Changes task's data in db or returns an error if task or board is not found
+ * @param {string} boardId  id of board
+ * @param {string} id  id of task 
+ * @param {{title: string, order: number, description: string, userId: string, boardId: string, columnId: string}} task data for task's update
+ * @returns {(Task|Object)} task with changed data or an error if task or board is not found
+ */
 const putTask = (boardId, id, task) => {
   const boardIndex = db.boards.findIndex(el => el.id === boardId);
   if (boardIndex === -1) throw new Error(`Board with id ${boardId} not found`);
@@ -147,6 +172,12 @@ const putTask = (boardId, id, task) => {
   return taskUpdate;
 };
 
+/**
+ * Deletes the task by specified id and boardId or returns an error if task or board is not found
+ * @param {string} boardId  id of board
+ * @param {string} id  id of task 
+ * @returns {(void|Object)} returns nothing or error object if an error occurred
+ */
 const deleteTask = (boardId, id) => {
   const boardIndex = db.boards.findIndex(el => el.id === boardId);
   if (boardIndex === -1) throw new Error(`Board with id ${boardId} not found`);
