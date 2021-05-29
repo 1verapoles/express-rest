@@ -62,28 +62,54 @@ const deleteUser = (id) => {
   db.users.splice(userIndex, 1);
 };
 
+
+/**
+ * Returns the array of all boards
+ * @returns {Board[]} all boards
+ */
 const getAllBoards = () => db.boards;
 
+/**
+ * Returns the board by specified id or an error if board is not found
+ * @param {string} id  id of board
+ * @returns {(Board|Object)} board or error object if an error occurred
+ */
 const getBoard = (id) => {
   const board = db.boards.find(el => el.id === id);
   if (!board) throw new Error(`Board with id ${id} not found`);
   return board;
 };
 
+/**
+ * Creates new board and adds him to db 
+ * @param {{title: string, columns: Object[]}} board data for new board
+ * @returns {Board} new board 
+ */
 const postBoard = (board) => {
   const newBoard = new Board({ ...board });
   db.boards.push(newBoard);
   return newBoard;
 };
 
+/**
+ * Changes board's data in db or returns an error if board is not found
+ * @param {string} id  id of board 
+ * @param {{title: string, columns: Object[]}} board data for board's update
+ * @returns {(Board|Object)} board with changed data or an error if board is not found
+ */
 const putBoard = (id, board) => {
   const boardUpdate = db.boards.find(el => el.id === id);
   if (!boardUpdate) throw new Error(`Board with id ${id} not found`);
-  boardUpdate.title = board.title;
-  boardUpdate.columns = board.columns;
+  if (board.title) {boardUpdate.title = board.title;}
+  if (board.columns.length) {boardUpdate.columns = board.columns;}
   return boardUpdate;
 };
 
+/**
+ * Deletes the board by specified id and all its tasks or returns an error if board is not found
+ * @param {string} id  id of board
+ * @returns {(void|Object)} returns nothing or error object if an error occurred
+ */
 const deleteBoard = (id) => {
   const boardIndex = db.boards.findIndex(el => el.id === id);
   if (boardIndex === -1) throw new Error(`Board with id ${id} not found`);
@@ -112,12 +138,12 @@ const putTask = (boardId, id, task) => {
   if (boardIndex === -1) throw new Error(`Board with id ${boardId} not found`);
   const taskUpdate = db.tasks.find(el => el.id === id && el.boardId === boardId);
   if (!taskUpdate) throw new Error(`Task with id ${id} not found`);
-  taskUpdate.title = task.title;
-  taskUpdate.order = task.order;
-  taskUpdate.description = task.description;
-  taskUpdate.userId = task.userId;
-  taskUpdate.boardId = boardId;
-  taskUpdate.columnId = task.columnId;
+  if (task.title) {taskUpdate.title = task.title;}
+  if (task.order) {taskUpdate.order = task.order;}
+  if (task.description) {taskUpdate.description = task.description;}
+  if (task.userId) {taskUpdate.userId = task.userId;}
+  if (boardId) {taskUpdate.boardId = boardId;}
+  if (task.columnId) {taskUpdate.columnId = task.columnId;}
   return taskUpdate;
 };
 
