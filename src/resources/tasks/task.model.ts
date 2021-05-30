@@ -1,9 +1,18 @@
+export {};
 const { v4: uuidv4 } = require('uuid');
+import {taskType} from '../../common/all';
 
 /**
  * Class to create a task object
  */ 
 class Task {
+  readonly id: string;
+  title: string;
+  order: number;
+  description: string;
+  userId: string;
+  boardId: string;
+  columnId: string;
   /**
    * @param {Object} arg Information about the task
    */
@@ -39,7 +48,7 @@ class Task {
  * @param {Task} task task object
  * @returns {{id: string, title: string, order: number, description: string, userId: string, boardId: string, columnId: string}} object - copy of input task object   
  */  
-  static toResponse(task) {
+  static toResponse(task: taskType): taskType {
     const { id, title, order, description, userId, boardId, columnId } = task;
     return { id, title, order, description, userId, boardId, columnId };
   }

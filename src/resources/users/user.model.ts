@@ -1,12 +1,18 @@
+export {};
 const { v4: uuidv4 } = require('uuid');
+import {userType} from '../../common/all';
 
 /**
  * Class to create a user object
  */
 class User {
+  readonly id: string;
+   name: string;
+   login: string;
+   password: string;
   /**
    * @param {Object} arg Information about the user
-   */
+   */   
   constructor({
     id = uuidv4(),
     name = 'USER',
@@ -30,7 +36,7 @@ class User {
  * @param {User} user user object
  * @returns {{id: string, name: string, login: string}} object without password 
  */
-  static toResponse(user) {
+  static toResponse(user: userType): userType {
     const { id, name, login } = user;
     return { id, name, login };
   }

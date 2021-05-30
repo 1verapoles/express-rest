@@ -1,11 +1,13 @@
+export {};
 const Task = require('../../common/db');
+import {taskType, delType} from '../../common/all';
 
 /**
  * Returns the array of all tasks of certain board
  * @param {string} boardId  id of board
  * @returns {Task[]} all tasks of certain board
  */
-const getAllTasksRepo = (boardId) => Task.getAllTasks(boardId);
+const getAllTasksRepo = (boardId: string): taskType[] => Task.getAllTasks(boardId);
 
 
 /**
@@ -14,7 +16,7 @@ const getAllTasksRepo = (boardId) => Task.getAllTasks(boardId);
  * @param {string} id  id of task
  * @returns {(Task|Object)} task or error object if an error occurred
  */
-const getTaskRepo = (boardId, id) => Task.getTask(boardId, id);
+const getTaskRepo = (boardId: string, id: string): taskType => Task.getTask(boardId, id);
 
 /**
  * Creates new task and adds him to db 
@@ -22,7 +24,7 @@ const getTaskRepo = (boardId, id) => Task.getTask(boardId, id);
  * @param {{title: string, order: number, description: string, userId: string, boardId: string, columnId: string}} task data for new task
  * @returns {Task} new task 
  */
-const postTaskRepo = (boardId, task) => Task.postTask(boardId, task);
+const postTaskRepo = (boardId: string, task: taskType): taskType => Task.postTask(boardId, task);
 
 /**
  * Changes task's data in db or returns an error if task or board is not found
@@ -31,7 +33,7 @@ const postTaskRepo = (boardId, task) => Task.postTask(boardId, task);
  * @param {{title: string, order: number, description: string, userId: string, boardId: string, columnId: string}} task data for task's update
  * @returns {(Task|Object)} task with changed data or an error if task or board is not found
  */
-const putTaskRepo = (boardId, id, task) => Task.putTask(boardId, id, task);
+const putTaskRepo = (boardId: string, id: string, task: taskType): taskType => Task.putTask(boardId, id, task);
 
 /**
  * Deletes the task by specified id and boardId or returns an error if task or board is not found
@@ -39,7 +41,7 @@ const putTaskRepo = (boardId, id, task) => Task.putTask(boardId, id, task);
  * @param {string} id  id of task 
  * @returns {(void|Object)} returns nothing or error object if an error occurred
  */
-const deleteTaskRepo = (boardId, id) => Task.deleteTask(boardId, id);
+const deleteTaskRepo = (boardId: string, id: string): delType => Task.deleteTask(boardId, id);
 
 module.exports = {
   getAllTasks: getAllTasksRepo,
