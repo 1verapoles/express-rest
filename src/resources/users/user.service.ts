@@ -35,7 +35,7 @@ const putUser = (id: string, user: userType): userType => usersRepo.putUser(id, 
  * @param {string} id  id of user
  * @returns {(void|Object)} returns nothing or error object if an error occurred
  */
-const deleteUser = (id: string): delType => usersRepo.delType(id);
+const deleteUser = (id: string): delType => usersRepo.deleteUser(id);
 
 module.exports = {
     getAllUsers,

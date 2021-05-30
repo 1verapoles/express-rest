@@ -30,7 +30,7 @@ const putUser = (id, user) => usersRepo.putUser(id, user);
  * @param {string} id  id of user
  * @returns {(void|Object)} returns nothing or error object if an error occurred
  */
-const deleteUser = (id) => usersRepo.delType(id);
+const deleteUser = (id) => usersRepo.deleteUser(id);
 module.exports = {
     getAllUsers,
     getUser,
