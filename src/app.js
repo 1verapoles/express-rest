@@ -24,6 +24,7 @@ app.use('/', (req, res, next) => {
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 boardRouter.use('/:boardId/tasks', taskRouter);
+app.use('/docs', express.static(path.join(__dirname, 'docs')));
 
 app.use((err, req, res, next) => {
   if (err) {
