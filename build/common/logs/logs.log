@@ -1,5 +1,0 @@
-error [2021-06-06 08:33:58 +02:00] :: User with id 1 not found
-info [2021-06-06 08:33:58 +02:00] :: METHOD: GET :: URL: /users/1 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
-info [2021-06-06 08:34:13 +02:00] :: METHOD: GET :: URL: /tasks/1 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
-error [2021-06-06 08:35:12 +02:00] :: Board with id 1 not found
-info [2021-06-06 08:35:12 +02:00] :: METHOD: GET :: URL: /boards/1 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
