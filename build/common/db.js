@@ -7,8 +7,11 @@ const db = { users: [], boards: [], tasks: [] };
 const getAllUsers = () => db.users;
 const getUser = (id) => {
     const user = db.users.find((el) => el.id === id);
-    if (!user)
-        throw new Error(`User with id ${id} not found`);
+    if (!user) {
+        let e = new Error(`User with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     return user;
 };
 const postUser = (user) => {
@@ -18,8 +21,11 @@ const postUser = (user) => {
 };
 const putUser = (id, user) => {
     const userUpdate = db.users.find((el) => el.id === id);
-    if (!userUpdate)
-        throw new Error(`User with id ${id} not found`);
+    if (!userUpdate) {
+        let e = new Error(`User with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     if (user.name) {
         userUpdate.name = user.name;
     }
@@ -33,8 +39,11 @@ const putUser = (id, user) => {
 };
 const deleteUser = (id) => {
     const userIndex = db.users.findIndex((el) => el.id === id);
-    if (userIndex === -1)
-        throw new Error(`User with id ${id} not found`);
+    if (userIndex === -1) {
+        let e = new Error(`User with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     db.tasks.forEach((task) => { if (task.userId === id) {
         task.userId = null;
     } });
@@ -43,8 +52,11 @@ const deleteUser = (id) => {
 const getAllBoards = () => db.boards;
 const getBoard = (id) => {
     const board = db.boards.find((el) => el.id === id);
-    if (!board)
-        throw new Error(`Board with id ${id} not found`);
+    if (!board) {
+        let e = new Error(`Board with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     return board;
 };
 const postBoard = (board) => {
@@ -54,8 +66,11 @@ const postBoard = (board) => {
 };
 const putBoard = (id, board) => {
     const boardUpdate = db.boards.find((el) => el.id === id);
-    if (!boardUpdate)
-        throw new Error(`Board with id ${id} not found`);
+    if (!boardUpdate) {
+        let e = new Error(`Board with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     if (board.title) {
         boardUpdate.title = board.title;
     }
@@ -66,8 +81,11 @@ const putBoard = (id, board) => {
 };
 const deleteBoard = (id) => {
     const boardIndex = db.boards.findIndex((el) => el.id === id);
-    if (boardIndex === -1)
-        throw new Error(`Board with id ${id} not found`);
+    if (boardIndex === -1) {
+        let e = new Error(`Board with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     db.tasks.forEach((task) => { if (task.boardId === id) {
         db.tasks.splice(db.tasks.indexOf(task), 1);
     } });
@@ -76,11 +94,17 @@ const deleteBoard = (id) => {
 const getAllTasks = (boardId) => db.tasks.filter((el) => el.boardId === boardId);
 const getTask = (boardId, id) => {
     const boardIndex = db.boards.findIndex((el) => el.id === boardId);
-    if (boardIndex === -1)
-        throw new Error(`Board with id ${boardId} not found`);
+    if (boardIndex === -1) {
+        let e = new Error(`Board with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     const task = db.tasks.find((el) => el.id === id && el.boardId === boardId);
-    if (!task)
-        throw new Error(`Task with id ${id} not found`);
+    if (!task) {
+        let e = new Error(`Task with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     return task;
 };
 const postTask = (boardId, task) => {
@@ -90,11 +114,17 @@ const postTask = (boardId, task) => {
 };
 const putTask = (boardId, id, task) => {
     const boardIndex = db.boards.findIndex((el) => el.id === boardId);
-    if (boardIndex === -1)
-        throw new Error(`Board with id ${boardId} not found`);
+    if (boardIndex === -1) {
+        let e = new Error(`Board with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     const taskUpdate = db.tasks.find((el) => el.id === id && el.boardId === boardId);
-    if (!taskUpdate)
-        throw new Error(`Task with id ${id} not found`);
+    if (!taskUpdate) {
+        let e = new Error(`Task with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     if (task.title) {
         taskUpdate.title = task.title;
     }
@@ -117,11 +147,17 @@ const putTask = (boardId, id, task) => {
 };
 const deleteTask = (boardId, id) => {
     const boardIndex = db.boards.findIndex((el) => el.id === boardId);
-    if (boardIndex === -1)
-        throw new Error(`Board with id ${boardId} not found`);
+    if (boardIndex === -1) {
+        let e = new Error(`Board with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     const taskIndex = db.tasks.findIndex((el) => el.id === id && el.boardId === boardId);
-    if (taskIndex === -1)
-        throw new Error(`Task with id ${id} not found`);
+    if (taskIndex === -1) {
+        let e = new Error(`Task with id ${id} not found`);
+        e.statusCode = 404;
+        throw e;
+    }
     db.tasks.splice(taskIndex, 1);
 };
 module.exports = {

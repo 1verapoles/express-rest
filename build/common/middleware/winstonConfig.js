@@ -31,8 +31,6 @@ const logger = createLogger({
 });
 function writeInfoLog(req, res) {
     const { query, body, method, url } = req;
-    //const q = query['length'] ? JSON.stringify(query) : '';
-    //const b = body.length ? JSON.stringify(body) : '';
     finished(res, () => {
         logger.info(`METHOD: ${method} :: URL: ${url} :: QUERY: ${JSON.stringify(query)} :: BODY: ${JSON.stringify(body)} :: STATUS CODE: ${res.statusCode}`);
     });

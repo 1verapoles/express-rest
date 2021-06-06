@@ -1,3 +1,5 @@
-info [2021-06-06 07:45:08 +02:00] :: METHOD: GET :: URL: / :: QUERY: {} :: BODY: {} :: STATUS CODE: 304
-info [2021-06-06 07:45:10 +02:00] :: METHOD: GET :: URL: /favicon.ico :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
-info [2021-06-06 07:45:59 +02:00] :: METHOD: GET :: URL: /?s=7 :: QUERY: {"s":"7"} :: BODY: {} :: STATUS CODE: 404
+error [2021-06-06 08:33:58 +02:00] :: User with id 1 not found
+info [2021-06-06 08:33:58 +02:00] :: METHOD: GET :: URL: /users/1 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
+info [2021-06-06 08:34:13 +02:00] :: METHOD: GET :: URL: /tasks/1 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
+error [2021-06-06 08:35:12 +02:00] :: Board with id 1 not found
+info [2021-06-06 08:35:12 +02:00] :: METHOD: GET :: URL: /boards/1 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
