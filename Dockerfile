@@ -1,7 +1,6 @@
 FROM node:14.17-alpine
 WORKDIR /home/node/app
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
-COPY . .
-EXPOSE  ${PORT}
+COPY ./ ./
 CMD ["npm","start"]
