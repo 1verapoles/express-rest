@@ -18,12 +18,12 @@ const options = {
   },
   infoFile: {
     level: 'info',
-    filename: path.join(__dirname, '../logs/logs.log'),
+    filename: path.join(__dirname, '../../../logs/logs.log'),
     maxSize: 5242880
   },
   errorFile: {
     level: 'error',
-    filename: path.join(__dirname, '../logs/errors.log'),
+    filename: path.join(__dirname, '../../../logs/errors.log'),
     maxSize: 5242880
   }
 };
