@@ -5,7 +5,7 @@ services:
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
-      - ./logs:/usr/app/logs
+      - ./logs:/home/node/app/logs
     ports:
       - ${PORT}:${PORT}
     depends_on:
