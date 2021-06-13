@@ -12,7 +12,7 @@ services:
       - postgres
     environment:
       - PORT=${PORT}
-      networks:
+    networks:
         - backe
     restart: always
 
