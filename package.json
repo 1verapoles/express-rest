@@ -14,7 +14,10 @@
     "lint": "eslint --ext .js,.ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
-    "typ": "tsc"
+    "typ": "tsc",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ./src/common/typeorm/ormconfig.ts",
+    "migration:run": "npm run typeorm migration:run",
+    "migration:generate": "npm run typeorm migration:generate -- -n"
   },
   "keywords": [
     "rs",
@@ -52,8 +55,11 @@
     "dotenv": "9.0.0",
     "express": "4.17.1",
     "jsdoc": "^3.6.7",
+    "pg": "^8.6.0",
+    "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "4.1.6",
     "ts-node": "^10.0.0",
+    "typeorm": "^0.2.34",
     "uuid": "8.3.2",
     "winston": "^3.3.3",
     "yamljs": "0.3.0"

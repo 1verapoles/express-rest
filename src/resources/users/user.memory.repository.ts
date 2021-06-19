@@ -1,16 +1,44 @@
-export {};
-const User = require('../../common/db');
-import {userType, delType} from '../../common/all';
+export { };
+const User = require('../../common/entities/user.entity');
+const TaskEntity = require('../../common/entities/task.entity');
+import { userType, delType } from '../../common/all';
+const { getRepository } = require("typeorm");
 
-const getAllUsersRepo = (): userType[] => User.getAllUsers();
+const getAllUsersRepo = async (): Promise<userType[]> => {
+  const userRepository = getRepository(User);
+  return await userRepository.find();
+}
 
-const getUserRepo = (id: string): userType => User.getUser(id);
+const getUserRepo = async (id: string): Promise<userType> => {
+  try {
+    const userRepository = getRepository(User); return userRepository.findOneOrFail(id);
+  } catch (err) {
+    throw err;
+  }
+}
 
-const postUserRepo = (user: userType): userType => User.postUser(user);
+const postUserRepo = async (user: userType): Promise<userType> => {
+  const userRepository = getRepository(User);
+  const newUser = userRepository.create(user);
+  return await userRepository.save(newUser);
+}
 
-const putUserRepo = (id: string, user: userType): userType => User.putUser(id, user);
+const putUserRepo = async (id: string, user: userType): Promise<userType> => {
+  const userRepository = getRepository(User);
+  let userU = await getUserRepo(id);
+  userU = { ...userU, ...user };
+  return await userRepository.save(userU);
+}
 
-const deleteUserRepo = (id: string): delType => User.deleteUser(id);
+const deleteUserRepo = async (id: string): Promise<delType> => {
+  const userRepository = getRepository(User);
+  const taskRepository = getRepository(TaskEntity);
+  let taskU = await taskRepository.find({ where: { userId: id } });
+  taskU = { ...taskU, userId: null };
+  await taskRepository.save(taskU);
+  const userR = await getUserRepo(id);
+  await userRepository.remove(userR);
+}
 
 module.exports = {
   getAllUsers: getAllUsersRepo,

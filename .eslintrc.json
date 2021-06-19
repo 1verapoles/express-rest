@@ -10,8 +10,10 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "settings": {"noInlineConfig": true},
-  "extends": [    
+  "settings": {
+    "noInlineConfig": true
+  },
+  "extends": [
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
@@ -22,6 +24,7 @@
     "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
     "no-param-reassign": 0,
-    "@typescript-eslint/no-var-requires": 0
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/no-unused-vars": 0
   }
 }
