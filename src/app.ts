@@ -1,7 +1,11 @@
+export {};
 const express = require('express');
+import { Request, Response, NextFunction } from 'express';
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
+const { writeInfoLog, writeErrorLog } = require('./common/middleware/winstonConfig');
+const errorHandler = require('./common/middleware/errorHandler');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
@@ -13,7 +17,13 @@ app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use('/', (req, res, next) => {
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  writeInfoLog(req, res);
+  next();
+});
+
+app.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (req.originalUrl === '/') {
     res.send('Service is running!');
     return;
@@ -25,13 +35,19 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 boardRouter.use('/:boardId/tasks', taskRouter);
 
-app.use((err, req, res, next) => {
-  if (err) {
-    const { name, message, stack } = err;
-    res.status(404).json({ name, message, stack });
-  }
-  next();
+app.use(errorHandler);
+
+process.on('uncaughtException', err => {
+  writeErrorLog(err);
+  process.exit(1);
 });
+//throw new Error('uncaughtException: Oops!');
+
+process.on('unhandledRejection', err => {
+  writeErrorLog(err);
+  process.exit(1);
+});
+// Promise.reject(Error('unhandledRejection: Oops!'));
 
 
 module.exports = app;
