@@ -1,5 +1,6 @@
 const { Connection, createConnection, getConnection } = require('typeorm');
 const ConOpt = require('./ormconfig');
+require('reflect-metadata');
 
 // const DBConnect = async () => {
 //   let connection: typeof Connection | undefined;

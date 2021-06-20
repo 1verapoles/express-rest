@@ -4,6 +4,8 @@ const TaskEntity = require('../../common/entities/task.entity');
 import { userType, delType } from '../../common/all';
 const { getRepository } = require("typeorm");
 
+//console.log(User);
+
 const getAllUsersRepo = async (): Promise<userType[]> => {
   const userRepository = getRepository(User);
   return await userRepository.find();

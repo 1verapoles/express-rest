@@ -13,6 +13,7 @@ const ConOpt: typeof ConnectionOptions = {
   autoReconnect: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 3000,
+  synchronize: true,
   entities: [
     path.join(__dirname, '../entities/*.ts')
   ],
