@@ -5,3 +5,4 @@ error [2021-06-12 20:09:50 +02:00] :: Board with id 2281607b-5092-4403-a012-e36f
 error [2021-06-12 20:09:50 +02:00] :: Board with id 301c0253-d81e-49ed-9d60-7d1428327b9d not found
 error [2021-06-12 20:09:50 +02:00] :: Board with id 166e9819-0959-477c-915f-0e6b38463644 not found
 error [2021-06-12 20:09:52 +02:00] :: Task with id 488808d3-3d24-4838-b0a9-3de2a4390260 not found
+error [2021-06-20 08:45:56 +02:00] :: No repository for "User" was found. Looks like this entity is not registered in current "default" connection?

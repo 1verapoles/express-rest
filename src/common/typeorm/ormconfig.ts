@@ -1,19 +1,15 @@
 export { };
 const { ConnectionOptions } = require('typeorm');
-const dotenv = require('dotenv');
 const path = require('path');
-
-dotenv.config({
-  path: path.join(__dirname, '../../../.env')
-});
+const { POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_HOST } = require('../config');
 
 const ConOpt: typeof ConnectionOptions = {
   type: "postgres",
-  host: process.env['POSTGRES_DB'] || "localhost",
-  port: process.env['POSTGRES_PORT'] || 5432,
-  username: process.env['POSTGRES_USER'] || "postgres",
-  password: process.env['POSTGRES_PASSWORD'] || "postgres",
-  database: process.env['POSTGRES_DB'] || "node_project",
+  host: POSTGRES_HOST || "host.docker.internal",
+  port: POSTGRES_PORT || 5432,
+  username: POSTGRES_USER || "postgres",
+  password: POSTGRES_PASSWORD || "postgres",
+  database: POSTGRES_DB || "postgres",
   autoReconnect: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 3000,

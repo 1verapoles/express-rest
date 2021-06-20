@@ -72,3 +72,6 @@ info [2021-06-12 20:09:52 +02:00] :: METHOD: DELETE :: URL: /boards/e4ec13b4-c4a
 error [2021-06-12 20:09:52 +02:00] :: Task with id 488808d3-3d24-4838-b0a9-3de2a4390260 not found
 info [2021-06-12 20:09:52 +02:00] :: METHOD: GET :: URL: /boards/e4ec13b4-c4ae-4efc-b031-a007b886c5b2/tasks/488808d3-3d24-4838-b0a9-3de2a4390260 :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
 info [2021-06-12 20:09:52 +02:00] :: METHOD: DELETE :: URL: /boards/e4ec13b4-c4ae-4efc-b031-a007b886c5b2 :: QUERY: {} :: BODY: {} :: STATUS CODE: 204
+info [2021-06-20 08:45:35 +02:00] :: METHOD: GET :: URL: / :: QUERY: {} :: BODY: {} :: STATUS CODE: 200
+info [2021-06-20 08:45:36 +02:00] :: METHOD: GET :: URL: /favicon.ico :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
+info [2021-06-20 08:45:56 +02:00] :: METHOD: GET :: URL: /users :: QUERY: {} :: BODY: {} :: STATUS CODE: 200
