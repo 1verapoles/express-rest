@@ -1,51 +1,86 @@
-export { };
-const User = require('../../common/entities/user.entity');
-const TaskEntity = require('../../common/entities/task.entity');
-import { userType, delType } from '../../common/all';
-const { getRepository } = require("typeorm");
+/** @module UserRepository */
+import { getRepository } from "typeorm";
+import { User } from "../../entity/User";
+import { UserDTO } from "../../common/types";
 
-//console.log(User);
+// let userDB: Array<User>|[] = [];
 
-const getAllUsersRepo = async (): Promise<userType[]> => {
+const getAll = async (): Promise<Array<User> | []> => {
   const userRepository = getRepository(User);
-  return await userRepository.find();
-}
-
-const getUserRepo = async (id: string): Promise<userType> => {
-  try {
-    const userRepository = getRepository(User); return userRepository.findOneOrFail(id);
-  } catch (err) {
-    throw err;
-  }
-}
-
-const postUserRepo = async (user: userType): Promise<userType> => {
-  const userRepository = getRepository(User);
-  const newUser = userRepository.create(user);
-  return await userRepository.save(newUser);
-}
-
-const putUserRepo = async (id: string, user: userType): Promise<userType> => {
-  const userRepository = getRepository(User);
-  let userU = await getUserRepo(id);
-  userU = { ...userU, ...user };
-  return await userRepository.save(userU);
-}
-
-const deleteUserRepo = async (id: string): Promise<delType> => {
-  const userRepository = getRepository(User);
-  const taskRepository = getRepository(TaskEntity);
-  let taskU = await taskRepository.find({ where: { userId: id } });
-  taskU = { ...taskU, userId: null };
-  await taskRepository.save(taskU);
-  const userR = await getUserRepo(id);
-  await userRepository.remove(userR);
-}
-
-module.exports = {
-  getAllUsers: getAllUsersRepo,
-  getUser: getUserRepo,
-  postUser: postUserRepo,
-  putUser: putUserRepo,
-  deleteUser: deleteUserRepo
+  const allUsers = await userRepository.find()
+  return allUsers;
 };
+
+// const getAll = async (): Promise<Array<User> | []> => {
+//   const DB = await userDB;
+//   return DB;
+// };
+
+const getOne = async (id: string): Promise<User | undefined> => {
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne(id)
+  return user;
+};
+
+// const getOne = async (id: string): Promise<User | null | undefined> => {
+//   let user;
+//   try {
+//     user = await userDB.find((u) => u.id === id);
+//   } catch (e) {
+//     process.stderr.write(e);
+//   }
+//   return user;
+// };
+
+const createUser = async ({ name, login, password }: UserDTO): Promise<User|undefined> => {
+  const userRepository = getRepository(User);
+  const user = new User();
+  user.name = name;
+  user.login = login;
+  user.password = password;
+  await userRepository.save(user);
+  // const createdUser = await userRepository.findOne(user.id)
+  return user;
+};
+
+// const createUser = async ({ name, login, password }: UserDTO): Promise<User|undefined> => {
+//   const newUser = new User({ name, login, password })
+//   userDB = await [...userDB, newUser];
+//   return userDB[userDB.length - 1];
+// };
+
+const updateUser = async (id: string, newUserInfo: UserDTO): Promise<User|undefined> => {
+  const userRepository = getRepository(User);
+  const userToUpdate = await userRepository.findOne(id);
+  if (userToUpdate) {
+    const updatedUser = { ...userToUpdate, ...newUserInfo }
+    await userRepository.save(updatedUser);
+    return updatedUser;
+  }
+  return undefined;
+};
+
+// const updateUser = async (id: string, newUserInfo: object): Promise<User|undefined> => {
+//   const userToUpdate = await userDB.find((user) => user.id === id);
+//   const updatedUser = {
+//     ...userToUpdate,
+//     ...newUserInfo,
+//   };
+//   userDB = userDB.filter((user) => user.id !== id);
+//   userDB = [...userDB, updatedUser as IUser];
+//   return updatedUser as IUser;
+// };
+
+const deleteUser = async (id: string | undefined): Promise<void> => {
+  const userRepository = getRepository(User);
+  const userToRemove = await userRepository.findOne(id);
+  if (userToRemove) {
+    await userRepository.remove(userToRemove)
+  }
+};
+
+// const deleteUser = async (id: string | undefined): Promise<void> => {
+//   userDB = await userDB.filter((user) => user.id !== id);
+// };
+
+export default { getAll, getOne, createUser, updateUser, deleteUser };

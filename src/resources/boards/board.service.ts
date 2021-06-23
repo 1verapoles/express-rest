@@ -1,24 +1,20 @@
-export { };
-const boardsRepo = require('./board.memory.repository');
-import { boardType, delType } from '../../common/all';
+/** @module BoardService */
+import boardsRepo from './board.memory.repository';
+import { Board } from "../../entity/Board";
+import { BoardDTO } from "../../common/types";
+import taskRepo from '../tasks/task.memory.repository';
 
-const getAllBoards = (): Promise<boardType[]> => boardsRepo.getAllBoards();
+const getAll = async (): Promise<Array<Board>> => boardsRepo.getAll();
 
+const getOne = async (id: string): Promise<Board | undefined> => boardsRepo.getOne(id);
 
-const getBoard = (id: string): Promise<boardType> => boardsRepo.getBoard(id);
+const createBoard = async (board: BoardDTO): Promise<Board | undefined> => boardsRepo.createBoard(board);
 
+const updateBoard = async (id: string, updatedInfo: BoardDTO): Promise<Board | undefined> => boardsRepo.updateBoard(id, updatedInfo);
 
-const postBoard = (board: boardType): Promise<boardType> => boardsRepo.postBoard(board);
+const deleteBoard = async (id: string): Promise<void> => {
+  await taskRepo.deleteTasksByBoardId(id)
+  await boardsRepo.deleteBoard(id);
+}
 
-const putBoard = (id: string, board: boardType): Promise<boardType> => boardsRepo.putBoard(id, board);
-
-
-const deleteBoard = (id: string): Promise<delType> => boardsRepo.deleteBoard(id);
-
-module.exports = {
-    getAllBoards,
-    getBoard,
-    postBoard,
-    putBoard,
-    deleteBoard
-};
+export default { getAll, getOne, createBoard, updateBoard, deleteBoard };

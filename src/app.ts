@@ -1,31 +1,27 @@
-export {};
-const express = require('express');
-import { Request, Response, NextFunction } from 'express';
-const swaggerUI = require('swagger-ui-express');
-const path = require('path');
-const YAML = require('yamljs');
-const { writeInfoLog, writeErrorLog } = require('./common/middleware/winstonConfig');
-const errorHandler = require('./common/middleware/errorHandler');
-const userRouter = require('./resources/users/user.router');
-const boardRouter = require('./resources/boards/board.router');
-const taskRouter = require('./resources/tasks/task.router');
+import express, { Request, Response, NextFunction } from 'express';
+import "reflect-metadata";
+import swaggerUI from 'swagger-ui-express';
+import path from 'path';
+import YAML from 'yamljs';
+import { writeFileSync } from 'fs';
+import { router as userRouter } from './resources/users/user.router';
+import { router as boardRouter } from './resources/boards/board.router';
+import { router as taskRouter } from './resources/tasks/task.router';
+import { logger } from './middleware/logger';
+import { apiErrorHandler } from './middleware/errorHandler';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
 
+app.all('*', logger)
+
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  writeInfoLog(req, res);
-  next();
-});
 
 app.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (req.originalUrl === '/') {
-    res.send('Service is running!');
+    res.send('Docker TS Service is running!');
     return;
   }
   next();
@@ -33,21 +29,34 @@ app.use('/', (req: Request, res: Response, next: NextFunction) => {
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
-boardRouter.use('/:boardId/tasks', taskRouter);
+app.use('/boards/:boardId/tasks', taskRouter);
+app.use(apiErrorHandler);
 
-app.use(errorHandler);
-
-process.on('uncaughtException', err => {
-  writeErrorLog(err);
+process.on('uncaughtException', (error) => {
+  const date = new Date().toUTCString();
+  const message = `\n${date}\n${error.message}\n${error.stack}`;
+  const logPath = path.join(__dirname, "../logs/errorLog.txt")
+  writeFileSync(logPath, message, {flag: 'a'});
+  process.stdout.write("uncaughtException occured\nExit from app\n");
   process.exit(1);
 });
-//throw new Error('uncaughtException: Oops!');
 
-process.on('unhandledRejection', err => {
-  writeErrorLog(err);
+interface IUnhandledRejectionError {
+  message: string;
+  stack: string;
+}
+
+process.on('unhandledRejection', (error: IUnhandledRejectionError) => {
+  const date = new Date().toUTCString();
+  const message = `\n${date}\n${error.message}\n${error.stack}`;
+  const logPath = path.join(__dirname, "../logs/errorLog.txt")
+  writeFileSync(logPath, message, {flag: 'a'});
+  process.stdout.write("\nunhandledRejection occured\nExit from app\n");
   process.exit(1);
 });
-// Promise.reject(Error('unhandledRejection: Oops!'));
 
+// setTimeout(() => {
+//   throw new Error('oopps!')
+// }, 1000);
 
-module.exports = app;
+export { app };

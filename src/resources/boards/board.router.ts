@@ -1,33 +1,75 @@
-export { };
-const router = require('express').Router();
-import { Request, Response, NextFunction } from 'express';
-//const Board = require('./board.model');
-const handlerWrapper = require('../../common/handler-wrapper');
-const BoardsService = require('./board.service');
+import { Router } from 'express';
+import boardsService from './board.service';
+import { ApiError } from '../../error/ApiError';
 
-router.route('/').get(handlerWrapper(async (_req: Request, res: Response, _next: NextFunction) => {
-  const boards = BoardsService.getAllBoards();
-  res.status(200).json({ boards });
-}));
+const router = Router();
 
-router.route('/:id').get(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  const board = BoardsService.getBoard(req.params['id']);
-  res.status(200).json({ board });
-}));
+router
+  .route('/')
 
-router.route('/').post(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  const board = BoardsService.postBoard(req.body);
-  res.status(201).json({ board });
-}));
+  .get(async (_req, res, next) => {
+    try {
+      const boards = await boardsService.getAll();
+      res.json(boards);
+    } catch (e) {
+      next(e)
+    }
+  })
 
-router.route('/:id').put(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  const board = BoardsService.putBoard(req.params['id'], req.body);
-  res.status(200).json({ board });
-}));
+  .post(async (req, res, next) => {
+    try {
+      const { title, columns } = req.body;
+      const newBoard = await boardsService.createBoard({ title, columns });
+      res.status(201).json(newBoard);
+    } catch (e) {
+      next(e)
+    }
 
-router.route('/:id').delete(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  BoardsService.deleteBoard(req.params['id']);
-  res.sendStatus(204);
-}));
+  });
 
-module.exports = router;
+router
+  .route('/:id')
+
+  .get(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const board = await boardsService.getOne(id);
+      if (!board) {
+        next(ApiError.notFound('Board is not found'))
+        return;
+      }
+      res.status(200).json(board);
+    } catch (e) {
+      next(e)
+    }
+    
+  })
+
+  .put(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { title, columns } = req.body;
+      const updatedBoard = {
+        title,
+        columns,
+      };
+      const boardAfterUpdate = await boardsService.updateBoard(id, updatedBoard);
+      res.status(200).json(boardAfterUpdate);
+    } catch (e) {
+      next(e)
+    }
+    
+  })
+
+  .delete(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await boardsService.deleteBoard(id);
+      res.status(204).json({ message: 'Board was deleted' });
+    } catch (e) {
+      next(e)
+    }
+
+  });
+
+export { router };

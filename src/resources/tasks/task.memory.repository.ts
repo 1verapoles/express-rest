@@ -1,43 +1,90 @@
-export { };
-const { getRepository } = require("typeorm");
-const TaskEntity = require('../../common/entities/task.entity');
-//const Task = require('../../common/db');
-import { taskType, delType } from '../../common/all';
+/** @module TaskRepository */
+import { getRepository } from "typeorm";
+import { Task } from '../../entity/Task';
 
-const getAllTasksRepo = async (boardId: string): Promise<taskType[]> => {
-  const taskRepository = getRepository(TaskEntity);
-  return await taskRepository.find({ where: { boardId: boardId } });
+const getAll = async (): Promise<Array<Task> | []> => {
+  const taskRepository = getRepository(Task);
+  const allTasks = await taskRepository.find();
+  return allTasks;
 };
 
-const getTaskRepo = async (boardId: string, id: string): Promise<taskType> => {
-  const taskRepository = getRepository(TaskEntity);
-  return await taskRepository.find({ where: { boardId: boardId, id: id } });
+const getOne = async (id: string): Promise<Task | undefined> => {
+  const taskRepository = getRepository(Task);
+  const task = await taskRepository.findOne(id);
+  return task;
 };
 
-
-const postTaskRepo = async (boardId: string, task: taskType): Promise<taskType> => {
-  const taskRepository = getRepository(TaskEntity);
-  const newTask = taskRepository.create({ ...task, boardId });
-  return await taskRepository.save(newTask);
-}
-
-const putTaskRepo = async (boardId: string, id: string, task: taskType): Promise<taskType> => {
-  const taskRepository = getRepository(TaskEntity);
-  let taskU = await taskRepository.find({ where: { boardId: boardId, id: id } });
-  taskU = { ...taskU, ...task };
-  return await taskRepository.save(taskU);
+const createTask = async ({
+  title,
+  order,
+  description,
+  userId,
+  boardId,
+  columnId,
+}: Task): Promise<Task | undefined> => {
+  const taskRepository = getRepository(Task);
+  const task = new Task();
+  task.title = title;
+  task.order = order;
+  task.description = description;
+  task.userId = userId;
+  task.boardId = boardId;
+  task.columnId = columnId;
+  await taskRepository.save(task);
+  return task;
 };
 
-const deleteTaskRepo = async (boardId: string, id: string): Promise<delType> => {
-  const taskRepository = getRepository(TaskEntity);
-  const taskR = await taskRepository.find({ where: { boardId: boardId, id: id } });
-  await taskRepository.remove(taskR);
+const updateTask = async (id: string, newTaskInfo: Task): Promise<Task | undefined> => {
+  const taskRepository = getRepository(Task);
+  const taskToUpdate = await taskRepository.findOne(id);
+  if (taskToUpdate) {
+    const updatedTask = {
+      ...taskToUpdate,
+      ...newTaskInfo,
+    };
+    await taskRepository.save(updatedTask);
+    return updatedTask;
+  }
+  return undefined;
 };
 
-module.exports = {
-  getAllTasks: getAllTasksRepo,
-  getTask: getTaskRepo,
-  postTask: postTaskRepo,
-  putTask: putTaskRepo,
-  deleteTask: deleteTaskRepo
+const deleteTask = async (id: string): Promise<void> => {
+  const taskRepository = getRepository(Task);
+  const taskToRemove = await taskRepository.findOne(id);
+  if (taskToRemove) await taskRepository.remove(taskToRemove);
+};
+
+const deleteTasksByBoardId = async (boardId: string): Promise<void> => {
+  const taskRepository = getRepository(Task);
+  const tasksToRemove = await taskRepository.find({ where: { boardId } });
+  if (tasksToRemove) {
+    tasksToRemove.forEach(async task => {
+      await taskRepository.remove(task);
+    })
+  }
+};
+
+const setUserIdToNull = async (userId: string): Promise<void> => {
+  const taskRepository = getRepository(Task);
+  const tasks = await taskRepository.find({
+    where: 
+    { userId }
+  });
+  if (tasks) {
+    const updatedTasks = tasks.map(task => ({...task, userId: null}));
+    updatedTasks.forEach(async taskToSave => {
+      // @ts-ignore
+      await taskRepository.save(taskToSave);
+    });
+  }
+};
+
+export default {
+  getAll,
+  getOne,
+  createTask,
+  updateTask,
+  deleteTask,
+  deleteTasksByBoardId,
+  setUserIdToNull,
 };

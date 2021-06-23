@@ -1,32 +1,86 @@
-export { };
-const router = require('express').Router();
-import { Request, Response, NextFunction } from 'express';
-const handlerWrapper = require('../../common/handler-wrapper');
-const usersService = require('./user.service');
+import { Router } from 'express';
+import { User } from '../../entity/User';
+import usersService from './user.service';
+import { ApiError } from '../../error/ApiError';
 
-router.route('/').get(handlerWrapper(async (_req: Request, res: Response, _next: NextFunction) => {
-  const users = usersService.getAllUsers();
-  res.status(200).json({ users });
-}));
+const router = Router();
 
-router.route('/:id').get(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  const user = usersService.getUser(req.params['id']);
-  res.status(200).json({ user });
-}));
+router
+  .route('/')
 
-router.route('/').post(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  const user = usersService.postUser(req.body);
-  res.status(201).json({ user });
-}));
+  .get(async (_req, res, next) => {
+    try {
+      const users = await usersService.getAll();
+      // map user fields to exclude secret fields like "password"
+      res.json(users.map(User.toResponse));
+    } catch(e) {
+      next(e)
+    }
+  })
 
-router.route('/:id').put(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  const user = usersService.putUser(req.params['id'], req.body);
-  res.status(200).json({ user });
-}));
+  .post(async (req, res, next) => {
+    try {
+      const { name, login, password } = req.body;
+      if (!name || !login || !password) {
+        next(ApiError.badRequest('Body must contain "name", "login", "password" fields'));
+        return
+      }
+      const newUser = await usersService.createUser({ name, login, password });
+      if (newUser) {
+        res.status(201).json(User.toResponse(newUser));
+      }
+    } catch(e) {
+      next(e)
+      
+    }
+  });
 
-router.route('/:id').delete(handlerWrapper(async (req: Request, res: Response, _next: NextFunction) => {
-  usersService.deleteUser(req.params['id']);
-  res.sendStatus(204);
-}));
+router
+  .route('/:id')
 
-module.exports = router;
+  .get(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = await usersService.getOne(id);
+      if (!user) {
+        next(ApiError.notFound('User is not found'))
+        return;
+      }
+      res.status(200).json(User.toResponse(user));
+    } catch(e) {
+      next(e)
+    }
+  })
+
+  .put(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { name, login, password } = req.body;
+      const updatedUser = {
+        name,
+        login,
+        password,
+      };
+      if (!name || !login || !password) {
+        next(ApiError.badRequest('Body must contain "name", "login", "password" fields'));
+        return
+      }
+      const userAfterUpdate = await usersService.updateUser(id, updatedUser);
+      res.status(200).json(userAfterUpdate);
+    } catch(e) {
+      next(e)
+    }
+    
+  })
+
+  .delete(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await usersService.deleteUser(id);
+      res.status(204).json({ message: 'User was deleted' });
+    } catch(e) {
+      next(e)
+    }
+  });
+
+export { router };

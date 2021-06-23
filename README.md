@@ -8,7 +8,26 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/pryvvid/rs-basic-nodejs-2021Q2.git
+```
+
+## Switching to dev branch
+
+```
+git checkout task6/docker-basics
+```
+
+## Running application in docker
+
+```
+docker-compose up
+```
+
+## Docker images
+
+```
+https://hub.docker.com/r/pryvvid/node_rest_api
+https://hub.docker.com/r/pryvvid/postgres_rest_api
 ```
 
 ## Installing NPM modules
@@ -23,18 +42,21 @@ npm install
 npm start
 ```
 
+## Building application
+
+```
+npm run build
+```
+
+## Running build application
+
+```
+npm run server
+```
+
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
-
-
-## Running docker
-
-```
-sudo docker-compose up  (Linux)
-
-docker-compose up 
-```
 
 ## Testing
 

@@ -1,5 +1,0 @@
-info [2021-06-20 11:37:22 +02:00] :: METHOD: GET :: URL: / :: QUERY: {} :: BODY: {} :: STATUS CODE: 304
-info [2021-06-20 11:37:24 +02:00] :: METHOD: GET :: URL: /favicon.ico :: QUERY: {} :: BODY: {} :: STATUS CODE: 404
-info [2021-06-20 11:37:30 +02:00] :: METHOD: GET :: URL: /users :: QUERY: {} :: BODY: {} :: STATUS CODE: 304
-info [2021-06-20 11:44:55 +02:00] :: METHOD: GET :: URL: / :: QUERY: {} :: BODY: {} :: STATUS CODE: 304
-info [2021-06-20 11:45:13 +02:00] :: METHOD: GET :: URL: /users :: QUERY: {} :: BODY: {} :: STATUS CODE: 304

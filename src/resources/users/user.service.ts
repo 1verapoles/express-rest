@@ -1,21 +1,20 @@
-export { };
-const usersRepo = require('./user.memory.repository');
-import { userType, delType } from '../../common/all';
+/** @module UserService */
+import usersRepo from './user.memory.repository';
+import taskRepo from '../tasks/task.memory.repository';
+import { User } from "../../entity/User"
+import { UserDTO } from "../../common/types"
 
-const getAllUsers = (): Promise<userType[]> => usersRepo.getAllUsers();
+const getAll = async (): Promise<Array<User>> => usersRepo.getAll();
 
-const getUser = (id: string): Promise<userType> => usersRepo.getUser(id);
+const getOne = async (id: string): Promise<User | undefined> => usersRepo.getOne(id);
 
-const postUser = (user: userType): Promise<userType> => usersRepo.postUser(user);
+const createUser = async (user: UserDTO): Promise<User | undefined> => usersRepo.createUser(user);
 
-const putUser = (id: string, user: userType): Promise<userType> => usersRepo.putUser(id, user);
+const updateUser = async (id: string, updatedInfo: UserDTO): Promise<User | undefined> => usersRepo.updateUser(id, updatedInfo);
 
-const deleteUser = (id: string): Promise<delType> => usersRepo.deleteUser(id);
-
-module.exports = {
-    getAllUsers,
-    getUser,
-    postUser,
-    putUser,
-    deleteUser
+const deleteUser = async (id: string): Promise<void> => {
+  await taskRepo.setUserIdToNull(id);
+  await usersRepo.deleteUser(id);
 };
+
+export default { getAll, getOne, createUser, updateUser, deleteUser };
