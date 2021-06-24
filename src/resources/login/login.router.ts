@@ -11,7 +11,11 @@ router.route('/').post(async (req, res, next) => {
             next(ApiError.badRequest('Body must contain "login", "password" fields'));
             return;
         }
-        const token = await signToken(login, password, next);
+        const token = await signToken(login, password);
+        if (!token) {
+            next(ApiError.userNotFound('User is not found in DB'));
+            return;
+        }
         res.status(200).json({ token });
     } catch (e) {
         next(e)

@@ -16,6 +16,7 @@ const apiErrorHandler = (err: ErrorRequestHandler, _req: Request, res: Response,
     return;
   }
 
+
   log.write(`${date}\n500\nsomething went wrong\n------\n`)
   res.status(500).json({ message: "something went wrong" })
 }

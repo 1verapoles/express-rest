@@ -10,15 +10,16 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     next();
   } else {
     const sessionToken = req.headers.authorization;
-    // console.log('sessionToken', sessionToken);
+    //console.log('sessionToken', sessionToken);
     if (sessionToken && !sessionToken.includes('Bearer')) return res.status(401).send({ auth: false, message: "Authorization header doesn’t follow Bearer scheme" });
     if (!sessionToken) return res.status(401).send({ auth: false, message: "No token provided." });
     else {
       //@ts-ignore
       jwt.verify(sessionToken.split(' ')[1], JWT_SECRET_KEY, (_err, decoded) => {
+      console.log('decoded', decoded);
         if (decoded) {
           const userRepository = getRepository(User);
-          userRepository.findOne({ where: { userId: decoded['userId'], login: decoded['login'] } }).then(_user => {
+          userRepository.findOne({ where: { id: decoded['userId'], login: decoded['login'] } }).then(_user => {
             //req.user = user;
             console.log(`user: ${_user}`)
             next();
