@@ -21,6 +21,10 @@ class ApiError implements IApiError {
     return new ApiError(404, msg)
   }
 
+  static userNotFound(msg: string) {
+    return new ApiError(403, msg)
+  }
+
   static internal(msg: string) {
     return new ApiError(500, msg)
   }
