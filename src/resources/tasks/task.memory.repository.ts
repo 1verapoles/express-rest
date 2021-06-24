@@ -67,13 +67,13 @@ const deleteTasksByBoardId = async (boardId: string): Promise<void> => {
 const setUserIdToNull = async (userId: string): Promise<void> => {
   const taskRepository = getRepository(Task);
   const tasks = await taskRepository.find({
-    where: 
-    { userId }
+    where:
+      { userId }
   });
   if (tasks) {
-    const updatedTasks = tasks.map(task => ({...task, userId: null}));
+    const updatedTasks = tasks.map(task => ({ ...task, userId: null }));
     updatedTasks.forEach(async taskToSave => {
-      // @ts-ignore
+      //@ts-ignore
       await taskRepository.save(taskToSave);
     });
   }

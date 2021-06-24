@@ -3,7 +3,8 @@ import { finished } from 'stream';
 import { createLogger } from '../utils/writeLog';
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
-  const { method, url, query, body }: { method: string, url: string, query: object, body: object} = req;
+  //@ts-ignore
+  const { method, url, query, body } = req;
   const writeStream = createLogger('../../logs/log.txt')
   next()
 
