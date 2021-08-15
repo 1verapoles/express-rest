@@ -1,25 +1,25 @@
 export {};
 
-interface userType {
+type userType = {
   id?: string;
   name: string;
   login: string;
   password?: string; 
 };
 
-interface columnType {
+type columnType = {
   id?: string;
   title: string;
   order: number;
 };
 
-interface boardType {
+type boardType = {
   id?: string;
   title: string;
   columns: columnType[];
 };
 
-interface taskType {
+type taskType = {
   id?: string;
   title: string;
   order: number;
@@ -29,7 +29,7 @@ interface taskType {
   columnId: string;
 };
 
-interface dbType {
+type dbType = {
   users: userType[];
   boards: boardType[];
   tasks: taskType[];
@@ -37,7 +37,7 @@ interface dbType {
 
 type delType = undefined | void;
 
-export  {userType,
+export {userType,
   boardType,
   dbType,
   taskType,
